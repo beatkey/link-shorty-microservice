@@ -1,0 +1,42 @@
+{
+    "info": {
+        "_postman_id": "542ba3df-5b3e-4563-8c93-367d25a31d81",
+        "name": "Link Shorty Microservice",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "shortlinks",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/api/v1/shortlinks?url=https://example.com&provider=bit.ly",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "v1",
+                        "shortlinks"
+                    ],
+                    "query": [
+                        {
+                            "key": "url",
+                            "value": "https://example.com",
+                            "description": "The url to shorten"
+                        },
+                        {
+                            "key": "provider",
+                            "value": "bit.ly",
+                            "description": "The provider to use shortening (bit.ly or tinyurl)"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
