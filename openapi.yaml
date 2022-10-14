@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Link Shorty Microservice
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1
+tags:
+  - name: shortlinks
+
+paths:
+  /shortlinks:
+    post:
+      tags:
+        - shortlinks
+      operationId: shortlink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/shortlink'
+        required: true
+      responses:
+        '200':
+          description: Short link created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: https://example.com
+                  link:
+                    type: string
+                    example: https://bit.ly/8h1bka
+        '400':
+          description: Remote server error
+
+components:
+  schemas:
+    shortlink:
+      required:
+        - name
+      type: object
+      properties:
+        url:
+          type: string
+          example: https://example.com
+        provider:
+          type: string
+          example: bit.ly, tinyurl
+  requestBodies:
+    shortlink:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/shortlink'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/shortlink'
