@@ -12,26 +12,50 @@ class ShortLinksController extends Controller
     public function index(ShortLinksRequest $request){
         $client = new Client();
 
-        $res = $client->post("https://api.tinyurl.com/create", [
-            "query" => [
-                "api_token" => env("TINYURL_API")
-            ],
-            "json" => [
-                "url" => $request->url
-            ]
-        ]);
+        // if not set provider param, tinyurl will use as default
+        switch ($request->provider) {
+            case "bit.ly":
+                $res = $client->post("https://api-ssl.bitly.com/v4/shorten", [
+                    "headers" => [
+                        "Authorization" => "Bearer " . env("BITLY_API"),
+                        "Content-Type" => "application/json"
+                    ],
+                    "json" => [
+                        "long_url" => $request->url
+                    ]
+                ]);
 
-        if ($res->getStatusCode() !== 200) {
-            return response()->json([
-                "error" => "Remote server error: " . $res->getReasonPhrase(),
-            ], 400);
+                if ($res->getStatusCode() !== 200) {
+                    return response()->json([
+                        "error" => "Remote server error: " . $res->getReasonPhrase(),
+                    ], 400);
+                }
+
+                $link = json_decode($res->getBody())->link;
+                break;
+            default:
+                $res = $client->post("https://api.tinyurl.com/create", [
+                    "query" => [
+                        "api_token" => env("TINYURL_API")
+                    ],
+                    "json" => [
+                        "url" => $request->url
+                    ]
+                ]);
+
+                if ($res->getStatusCode() !== 200) {
+                    return response()->json([
+                        "error" => "Remote server error: " . $res->getReasonPhrase(),
+                    ], 400);
+                }
+
+                $link = json_decode($res->getBody())->data->tiny_url;
+                break;
         }
-
-        $res = json_decode($res->getBody())->data;
 
         return response()->json([
             "url" => $request->url,
-            "link" => $res->tiny_url
+            "link" => $link
         ]);
     }
 }
