@@ -25,7 +25,7 @@ class ShortLinksController extends Controller
                     ]
                 ]);
 
-                if ($res->getStatusCode() !== 200) {
+                if ($res->getStatusCode() !== 200 and $res->getStatusCode() !== 201) {
                     return response()->json([
                         "error" => "Remote server error: " . $res->getReasonPhrase(),
                     ], 400);
