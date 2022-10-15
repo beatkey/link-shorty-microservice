@@ -20,7 +20,11 @@
                 "provider" => "tinyurl"
             ]);
 
-            $response->assertStatus(200);
+            $response->assertStatus(200)
+            ->assertJsonStructure([
+                "url",
+                "link"
+            ]);
         }
 
         public function test_create_short_link_bitly(){
@@ -29,6 +33,10 @@
                 "provider" => "bit.ly"
             ]);
 
-            $response->assertStatus(200);
+            $response->assertStatus(200)
+            ->assertJsonStructure([
+                "url",
+                "link"
+            ]);
         }
     }
